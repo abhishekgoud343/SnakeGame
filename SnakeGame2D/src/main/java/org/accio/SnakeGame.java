@@ -12,7 +12,7 @@ public class SnakeGame extends JFrame {
     LoadGame menu;
     Board board;
 
-    SnakeGame() throws IOException {
+    SnakeGame() {
         this.setTitle("Snake Game 2D");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
