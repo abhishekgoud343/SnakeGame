@@ -108,12 +108,6 @@ public class LoadGame extends JPanel implements ActionListener {
                 throw new RuntimeException(e);
             }
             cardLayout.show(mainPanel, "board");
-//            board = new Board(B_WIDTH, B_HEIGHT, 100);
-//            removeAll();
-//            this.setVisible(false);
-//            snakeGame.add(board);
-//            revalidate();
-//            repaint();
         }
     }
 }
