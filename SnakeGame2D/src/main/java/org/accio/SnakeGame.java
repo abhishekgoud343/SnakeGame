@@ -2,7 +2,6 @@ package org.accio;
 
 import javax.swing.*;
 import java.awt.*;
-import java.io.IOException;
 
 
 public class SnakeGame extends JFrame {
@@ -19,6 +18,7 @@ public class SnakeGame extends JFrame {
 
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
+        
         board = new Board(B_WIDTH, B_HEIGHT);
         menu = new LoadGame(B_WIDTH, B_HEIGHT, cardLayout, mainPanel, board);
         mainPanel.add(menu, "menu");
@@ -30,7 +30,7 @@ public class SnakeGame extends JFrame {
         this.setVisible(true);
     }
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) {
         SnakeGame snakeGame = new SnakeGame();
     }
 }
