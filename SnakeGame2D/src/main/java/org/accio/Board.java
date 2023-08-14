@@ -24,8 +24,7 @@ public class Board extends JPanel implements ActionListener {
     boolean inGame = true;
     boolean isPaused = false;
     int HIGHEST_SCORE;
-    File file = new File("src/main/resources/HScore.txt");
-//    InputStream inputStream = this.getClass().getResourceAsStream("/HScore.txt");
+    File file = new File(System.getProperty("user.dir") + "\\SnakeGame2D\\src\\main\\resources\\HScore.txt");
     JButton restartButton;
 
     Board(int B_WIDTH, int B_HEIGHT) throws IOException {
@@ -43,15 +42,6 @@ public class Board extends JPanel implements ActionListener {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-//        try (
-//                InputStream is = this.getClass().getResource("src/main/resources/HScore.txt").openStream();
-//                InputStreamReader isr = new InputStreamReader(is);
-//                BufferedReader br = new BufferedReader(isr);
-//        ) {
-//            String line = br.readLine();
-//            HIGHEST_SCORE = Integer.parseInt(line);
-//        }
 
         this.B_WIDTH = B_WIDTH;
         this.B_HEIGHT = B_HEIGHT;
@@ -224,14 +214,6 @@ public class Board extends JPanel implements ActionListener {
             catch (IOException e) {
                 throw new RuntimeException(e);
             }
-//            try (
-//                    FileWriter fw = new FileWriter("src/main/resources/HScore.txt");
-//                    BufferedWriter bw = new BufferedWriter(fw)
-//            ) {
-//                bw.write("" + HIGHEST_SCORE);
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
         }
         String scoreMSG = "Score: " + score;
         String hScoreMSG = "Highest Score : " + HIGHEST_SCORE;
