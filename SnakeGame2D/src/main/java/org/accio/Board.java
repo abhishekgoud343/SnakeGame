@@ -24,7 +24,7 @@ public class Board extends JPanel implements ActionListener {
     boolean inGame = true;
     boolean isPaused = false;
     int HIGHEST_SCORE;
-    File file = new File(System.getProperty("user.dir") + "\\SnakeGame2D\\src\\main\\resources\\HScore.txt");
+    File file;
     JButton restartButton;
 
     Board(int B_WIDTH, int B_HEIGHT) {
@@ -33,6 +33,9 @@ public class Board extends JPanel implements ActionListener {
 
         this.setFocusable(true);
         this.setLayout(null);
+
+        String filePath = getClass().getResource("/").toString();
+        file = new File(filePath.substring(6, filePath.length() - 15) + "src\\main\\resources\\HScore.txt");
 
         try {
             BufferedReader br = new BufferedReader(new FileReader(file));
@@ -52,6 +55,7 @@ public class Board extends JPanel implements ActionListener {
         y = new int[MAX_DOTS];
     }
 
+    //set delay
     void setDELAY(int DELAY) throws IOException {
         this.DELAY = DELAY;
         this.setBackground(Color.BLACK);
