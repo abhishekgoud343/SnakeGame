@@ -10,3 +10,9 @@ The game has 3 levels, with the snake's speed being lower in the easy level and 
 The game is over when the snake's head collides with its own body or with the borders of the game board.
 
 When the game is over, both the current score and the highest score are displayed.
+
+# Instructions to run the Project locally
+Open the project folder (SnakeGame2D) in any IDE or code editor such as IntelliJ IDEA, VS Code, Eclipse etc.
+Run the java file at the location SnakeGame2D/src/main/java/org/accio/SnakeGame.java
+This java file contains the _main_ function and therefore the project can be thus run by running the aforementioned java file.
+The game will open in a new window.
