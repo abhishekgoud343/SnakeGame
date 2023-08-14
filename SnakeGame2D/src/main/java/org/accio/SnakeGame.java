@@ -26,10 +26,6 @@ public class SnakeGame extends JFrame {
 
         mainPanel.add(board, "board");
 
-
-//        game = new LoadGame(B_WIDTH, B_HEIGHT, this);
-//        this.add(game);
-
         this.add(mainPanel);
         this.pack();
         this.setResizable(false);
