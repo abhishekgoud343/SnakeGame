@@ -9,4 +9,4 @@ The game has 3 levels, with the snake's speed being lower in the easy level and 
 
 The game is over when the snake's head collides with its own body or with the borders of the game board.
 
-When the game is over, both the current score and the highest score displayed.
+When the game is over, both the current score and the highest score are displayed.
