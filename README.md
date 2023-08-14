@@ -13,10 +13,7 @@ When the game is over, both the current score and the highest score are displaye
 
 
 # Instructions to run the Project locally
-Open the project folder (SnakeGame2D) in any IDE or code editor such as IntelliJ IDEA, VS Code, Eclipse etc.
-
-Run the java file at the location SnakeGame2D/src/main/java/org/accio/SnakeGame.java
-
-This java file contains the _main_ function and therefore the project can be thus run by running the aforementioned java file.
-
-The game will open in a new window.
+1. Open the project folder (SnakeGame2D) in any IDE or code editor such as IntelliJ IDEA, VS Code, Eclipse etc.  
+2. Run the java file at the location SnakeGame2D/src/main/java/org/accio/SnakeGame.java  
+3. This java file contains the _main_ function and therefore the project can be thus run by running the aforementioned java file.  
+4. The game will load in a new window.
