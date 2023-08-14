@@ -27,7 +27,7 @@ public class Board extends JPanel implements ActionListener {
     File file = new File(System.getProperty("user.dir") + "\\SnakeGame2D\\src\\main\\resources\\HScore.txt");
     JButton restartButton;
 
-    Board(int B_WIDTH, int B_HEIGHT) throws IOException {
+    Board(int B_WIDTH, int B_HEIGHT) {
         TAdapter tAdapter = new TAdapter();
         this.addKeyListener(tAdapter);
 
