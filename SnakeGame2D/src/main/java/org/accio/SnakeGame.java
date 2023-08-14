@@ -3,7 +3,6 @@ package org.accio;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
-import java.net.URISyntaxException;
 
 
 public class SnakeGame extends JFrame {
@@ -14,7 +13,7 @@ public class SnakeGame extends JFrame {
     LoadGame menu;
     Board board;
 
-    SnakeGame() throws URISyntaxException, IOException {
+    SnakeGame() throws IOException {
         this.setTitle("Snake Game 2D");
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
@@ -23,7 +22,6 @@ public class SnakeGame extends JFrame {
         board = new Board(B_WIDTH, B_HEIGHT);
         menu = new LoadGame(B_WIDTH, B_HEIGHT, cardLayout, mainPanel, board);
         mainPanel.add(menu, "menu");
-
         mainPanel.add(board, "board");
 
         this.add(mainPanel);
@@ -32,7 +30,7 @@ public class SnakeGame extends JFrame {
         this.setVisible(true);
     }
 
-    public static void main(String[] args) throws URISyntaxException, IOException {
+    public static void main(String[] args) throws IOException {
         SnakeGame snakeGame = new SnakeGame();
     }
 }
