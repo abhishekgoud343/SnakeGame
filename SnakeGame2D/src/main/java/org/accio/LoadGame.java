@@ -8,7 +8,6 @@ import java.io.IOException;
 
 
 public class LoadGame extends JPanel implements ActionListener {
-    SnakeGame snakeGame;
     int B_WIDTH;
     int B_HEIGHT;
     CardLayout cardLayout;
