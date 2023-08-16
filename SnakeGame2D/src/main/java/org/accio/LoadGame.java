@@ -1,15 +1,16 @@
 package org.accio;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
 import java.util.Objects;
+import javax.swing.*;
 
 
 public class LoadGame extends JPanel implements ActionListener {
-    int B_WIDTH = SnakeGame.B_WIDTH, B_HEIGHT = SnakeGame.B_HEIGHT;
+    int B_WIDTH = SnakeGame.B_WIDTH;
+    int B_HEIGHT = SnakeGame.B_HEIGHT;
     CardLayout cardLayout;
     JPanel mainPanel;
     Menu menu;
@@ -31,7 +32,7 @@ public class LoadGame extends JPanel implements ActionListener {
         start_game.setBackground(Color.WHITE);
         start_game.setForeground(Color.BLUE);
         start_game.setFont(new Font(start_game.getFont().getFontName(), Font.BOLD, 18));
-        start_game.setBounds(B_WIDTH / 2 - 100, B_HEIGHT / 2 - 40, 200, 36);
+        start_game.setBounds(B_WIDTH / 2 - 100, B_HEIGHT / 2 - 50, 200, 36);
         start_game.addActionListener(this);
         this.add(start_game);
 
@@ -39,7 +40,7 @@ public class LoadGame extends JPanel implements ActionListener {
         clearScore.setBackground(Color.BLACK);
         clearScore.setForeground(Color.RED);
         clearScore.setFont(new Font(clearScore.getFont().getFontName(), Font.PLAIN, 14));
-        clearScore.setBounds(B_WIDTH / 2 - 70, B_HEIGHT / 2 + 20, 140, 30);
+        clearScore.setBounds(B_WIDTH / 2 - 65, B_HEIGHT / 2 + 10, 130, 30);
         clearScore.addActionListener(this);
         this.add(clearScore);
 
@@ -55,16 +56,18 @@ public class LoadGame extends JPanel implements ActionListener {
         if (actionEvent.getSource() == start_game) {
             menu = new Menu(cardLayout, mainPanel, board);
             mainPanel.add(menu, "menu");
+
             cardLayout.show(mainPanel, "menu");
         }
         else if (actionEvent.getSource() == clearScore) {
+            String sp = File.separator;
             String filePath = Objects.requireNonNull(getClass().getResource("/")).toString();
-            File file = new File(filePath.substring(6, filePath.length() - 15) + "src\\main\\resources\\HScore.txt");
+            File file = new File(filePath.substring(6, filePath.length() - 15) + "src" + sp + "main" + sp + "resources" + sp + "HScore.txt");
 
-            try {
-                BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+            try (
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(file))
+            ) {
                 bw.write("0");
-                bw.close();
             }
             catch (IOException e) {
                 throw new RuntimeException(e);
@@ -78,7 +81,8 @@ public class LoadGame extends JPanel implements ActionListener {
         String s = "The score is reset!";
         Font small = new Font("Helvetica", Font.BOLD, 16);
         FontMetrics fontMetrics = getFontMetrics(small);
-        int x = (B_WIDTH - fontMetrics.stringWidth(s)) / 2, y = B_HEIGHT - 80;
+        int x = (B_WIDTH - fontMetrics.stringWidth(s)) / 2;
+        int y = B_HEIGHT - 80;
 
         JWindow w = new JWindow();
         w.setBackground(new Color(0, 0, 0, 0));
@@ -97,6 +101,7 @@ public class LoadGame extends JPanel implements ActionListener {
                  // set the color of text
                  g.setColor(new Color(255, 255, 255, 240));
                  g.drawString(s, 25, 27);
+
                  int t = 250;
 
                  // draw the shadow of the toast

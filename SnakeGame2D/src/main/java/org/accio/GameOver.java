@@ -4,20 +4,23 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
-import javax.swing.*;
 import java.util.Objects;
+import javax.swing.*;
 
 
 public class GameOver extends JPanel implements ActionListener {
+    int B_WIDTH = SnakeGame.B_WIDTH;
+    int B_HEIGHT = SnakeGame.B_HEIGHT;
     CardLayout cardLayout;
     JPanel mainPanel;
     Board board;
-    int B_WIDTH = SnakeGame.B_WIDTH, B_HEIGHT = SnakeGame.B_HEIGHT;
     int DOTS;
     int HIGHEST_SCORE;
-    JLabel gameOverLabel, scoreLabel, hScoreLabel;
+    JLabel gameOverLabel;
+    JLabel scoreLabel, hScoreLabel;
     JButton restartButton;
     File file;
+    static final String sp = File.separator;
 
     GameOver(CardLayout cardLayout, JPanel mainPanel) {
         this.cardLayout = cardLayout;
@@ -29,14 +32,14 @@ public class GameOver extends JPanel implements ActionListener {
         this.board = board;
 
         String filePath = Objects.requireNonNull(getClass().getResource("/")).toString();
-        file = new File(filePath.substring(6, filePath.length() - 15) + "src\\main\\resources\\HScore.txt");
+        file = new File(filePath.substring(6, filePath.length() - 15) + "src" + sp + "main" + sp + "resources" + sp + "HScore.txt");
 
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String line = br.readLine();
-            HIGHEST_SCORE = Integer.parseInt(line);
-            br.close();
-        } catch (IOException e) {
+        try (
+                BufferedReader br = new BufferedReader(new FileReader(file))
+        ) {
+            HIGHEST_SCORE = Integer.parseInt(br.readLine());
+        }
+        catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
@@ -71,14 +74,16 @@ public class GameOver extends JPanel implements ActionListener {
 
         //Score display
         int score = (DOTS - Board.INIT_DOTS) * 100;
+
         if (score > HIGHEST_SCORE) {
             HIGHEST_SCORE = score;
-            try {
-                BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+
+            try (
+                    BufferedWriter bw = new BufferedWriter(new FileWriter(file))
+            ) {
                 bw.write("" + HIGHEST_SCORE);
-                bw.close();
             }
-            catch (IOException e) {
+            catch (Exception e) {
                 throw new RuntimeException(e);
             }
         }

@@ -3,16 +3,19 @@ package org.accio;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
 import javax.swing.*;
 
 
 public class Menu extends JPanel implements ActionListener {
-    int B_WIDTH = SnakeGame.B_WIDTH, B_HEIGHT = SnakeGame.B_HEIGHT;
+    int B_WIDTH = SnakeGame.B_WIDTH;
+    int B_HEIGHT = SnakeGame.B_HEIGHT;
     CardLayout cardLayout;
     JPanel mainPanel;
     Board board;
-    JButton easy, medium, hard;
+    JButton easy;
+    JButton medium;
+    JButton hard;
+
     Menu(CardLayout cardLayout, JPanel mainPanel, Board board) {
         this.setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
         this.setBackground(Color.ORANGE);
@@ -54,32 +57,14 @@ public class Menu extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
-        if (actionEvent.getSource() == easy) {
-            try {
-                board.setDELAY(240);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            cardLayout.show(mainPanel, "board");
-            board.requestFocusInWindow();
-        }
-        else if (actionEvent.getSource() == medium) {
-            try {
-                board.setDELAY(180);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            cardLayout.show(mainPanel, "board");
-            board.requestFocusInWindow();
-        }
-        else if (actionEvent.getSource() == hard) {
-            try {
-                board.setDELAY(120);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            cardLayout.show(mainPanel, "board");
-            board.requestFocusInWindow();
-        }
+        if (actionEvent.getSource() == easy)
+            board.setDELAY(240);
+        else if (actionEvent.getSource() == medium)
+            board.setDELAY(180);
+        else if (actionEvent.getSource() == hard)
+            board.setDELAY(120);
+
+        cardLayout.show(mainPanel, "board");
+        board.requestFocusInWindow();
     }
 }

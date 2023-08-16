@@ -2,7 +2,6 @@ package org.accio;
 
 import java.awt.*;
 import java.awt.event.*;
-import java.io.*;
 import java.net.URL;
 import javax.swing.*;
 
@@ -11,7 +10,8 @@ public class Board extends JPanel implements ActionListener {
     CardLayout cardLayout;
     JPanel mainPanel;
     GameOver gameOver;
-    int B_WIDTH = SnakeGame.B_WIDTH, B_HEIGHT = SnakeGame.B_HEIGHT;
+    int B_WIDTH = SnakeGame.B_WIDTH;
+    int B_HEIGHT = SnakeGame.B_HEIGHT;
     int DOT_SIZE = 10;
     int MAX_DOTS;
     static final int INIT_DOTS = 4;
@@ -44,7 +44,7 @@ public class Board extends JPanel implements ActionListener {
     }
 
     //set delay
-    void setDELAY(int DELAY) throws IOException {
+    void setDELAY(int DELAY) {
         this.DELAY = DELAY;
         this.setBackground(Color.BLACK);
         this.initGame();
