@@ -4,12 +4,15 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.URL;
+import java.util.Objects;
 import javax.swing.*;
 
 
 public class Board extends JPanel implements ActionListener {
-    int B_WIDTH;
-    int B_HEIGHT;
+    CardLayout cardLayout;
+    JPanel mainPanel;
+    GameOver gameOver;
+    int B_WIDTH = SnakeGame.B_WIDTH, B_HEIGHT = SnakeGame.B_HEIGHT;
     int DOT_SIZE = 10;
     int MAX_DOTS;
     static final int INIT_DOTS = 4;
@@ -25,16 +28,16 @@ public class Board extends JPanel implements ActionListener {
     boolean isPaused = false;
     int HIGHEST_SCORE;
     File file;
-    JButton restartButton;
 
-    Board(int B_WIDTH, int B_HEIGHT) {
+    Board(CardLayout cardLayout, JPanel mainPanel, GameOver gameOver) {
         TAdapter tAdapter = new TAdapter();
         this.addKeyListener(tAdapter);
 
         this.setFocusable(true);
+        this.requestFocusInWindow();
         this.setLayout(null);
 
-        String filePath = getClass().getResource("/").toString();
+        String filePath = Objects.requireNonNull(getClass().getResource("/")).toString();
         file = new File(filePath.substring(6, filePath.length() - 15) + "src\\main\\resources\\HScore.txt");
 
         try {
@@ -46,8 +49,9 @@ public class Board extends JPanel implements ActionListener {
             throw new RuntimeException(e);
         }
 
-        this.B_WIDTH = B_WIDTH;
-        this.B_HEIGHT = B_HEIGHT;
+        this.cardLayout = cardLayout;
+        this.mainPanel = mainPanel;
+        this.gameOver = gameOver;
 
         MAX_DOTS = (B_WIDTH * B_HEIGHT) / (DOT_SIZE * DOT_SIZE);
 
@@ -121,7 +125,7 @@ public class Board extends JPanel implements ActionListener {
             }
         }
         else {
-            gameOver(g);
+            this.gameOver();
             timer.stop();
         }
     }
@@ -138,14 +142,6 @@ public class Board extends JPanel implements ActionListener {
             this.checkApple();
             this.move();
             repaint();
-        }
-
-        if (actionEvent.getSource() == restartButton) {
-            JButton button = (JButton) actionEvent.getSource();
-            button.setVisible(false);
-            inGame = true;
-            leftDirection = true; rightDirection = false; upDirection = false; downDirection = false;
-            initGame();
         }
     }
 
@@ -187,48 +183,10 @@ public class Board extends JPanel implements ActionListener {
             inGame = false;
     }
 
-    public void gameOver(Graphics g) {
-        //Game Over message
-        String gameOverMSG = "Game Over!";
-
-        Font medium = new Font("Helvetica", Font.BOLD, 20);
-        FontMetrics fontMetrics1 = getFontMetrics(medium);
-
-        g.setColor(Color.RED);
-        g.setFont(medium);
-        g.drawString(gameOverMSG, (B_WIDTH - fontMetrics1.stringWidth(gameOverMSG)) / 2, (int) (3.0 * B_HEIGHT / 8.0) - 30);
-
-        //Restart button
-        restartButton = new JButton("Restart Game");
-        this.add(restartButton);
-        restartButton.setBackground(Color.WHITE);
-        restartButton.setFont(new Font(restartButton.getFont().getFontName(), Font.PLAIN, restartButton.getFont().getSize() + 2));
-        restartButton.setBounds(B_WIDTH / 2 - 70, B_HEIGHT / 2 - 30, 140, 24);
-        restartButton.addActionListener(this);
-
-        //Score display
-        int score = (DOTS - INIT_DOTS) * 100;
-        if (score > HIGHEST_SCORE) {
-            HIGHEST_SCORE = score;
-            try {
-                BufferedWriter bw = new BufferedWriter(new FileWriter(file));
-                bw.write("" + HIGHEST_SCORE);
-                bw.close();
-            }
-            catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-        }
-        String scoreMSG = "Score: " + score;
-        String hScoreMSG = "Highest Score : " + HIGHEST_SCORE;
-
-        Font small = new Font("Helvetica", Font.BOLD, 16);
-        FontMetrics fontMetrics2 = getFontMetrics(small);
-
-        g.setColor(Color.WHITE);
-        g.setFont(small);
-        g.drawString(scoreMSG, (B_WIDTH - fontMetrics2.stringWidth(scoreMSG)) / 2, (int) (5.0 * B_HEIGHT / 8.0));
-        g.drawString(hScoreMSG, (B_WIDTH - fontMetrics2.stringWidth(hScoreMSG)) / 2, (int) (5.0 * B_HEIGHT / 8.0) + 32);
+    public void gameOver() {
+        gameOver.setValues(HIGHEST_SCORE, DOTS, file, this);
+        cardLayout.show(mainPanel, "gameOver");
+        gameOver.screen();
     }
 
     //implements Controls
@@ -244,28 +202,30 @@ public class Board extends JPanel implements ActionListener {
 
             lastEnter = System.currentTimeMillis();
 
-            if ((key == KeyEvent.VK_LEFT || key == KeyEvent.VK_A) && !rightDirection) {
-                leftDirection = true;
-                upDirection = false;
-                downDirection = false;
-            }
-            else if ((key == KeyEvent.VK_RIGHT || key == KeyEvent.VK_D) && !leftDirection) {
-                rightDirection = true;
-                upDirection = false;
-                downDirection = false;
-            }
-            else if ((key == KeyEvent.VK_UP || key == KeyEvent.VK_W) && !downDirection) {
-                leftDirection = false;
-                rightDirection = false;
-                upDirection = true;
-            }
-            else if ((key == KeyEvent.VK_DOWN || key == KeyEvent.VK_S) && !upDirection) {
-                leftDirection = false;
-                rightDirection = false;
-                downDirection = true;
+            if (!isPaused) {
+                if ((key == KeyEvent.VK_LEFT || key == KeyEvent.VK_A) && !rightDirection) {
+                    leftDirection = true;
+                    upDirection = false;
+                    downDirection = false;
+                }
+                else if ((key == KeyEvent.VK_RIGHT || key == KeyEvent.VK_D) && !leftDirection) {
+                    rightDirection = true;
+                    upDirection = false;
+                    downDirection = false;
+                }
+                else if ((key == KeyEvent.VK_UP || key == KeyEvent.VK_W) && !downDirection) {
+                    leftDirection = false;
+                    rightDirection = false;
+                    upDirection = true;
+                }
+                else if ((key == KeyEvent.VK_DOWN || key == KeyEvent.VK_S) && !upDirection) {
+                    leftDirection = false;
+                    rightDirection = false;
+                    downDirection = true;
+                }
             }
             //pause or resume the game
-            else if (key == KeyEvent.VK_SPACE) {
+            if (key == KeyEvent.VK_SPACE) {
                 if (isPaused) {
                     timer.start();
                     isPaused = false;

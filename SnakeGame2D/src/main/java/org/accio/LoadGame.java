@@ -4,23 +4,20 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.IOException;
+import java.io.*;
+import java.util.Objects;
 
 
 public class LoadGame extends JPanel implements ActionListener {
-    int B_WIDTH;
-    int B_HEIGHT;
+    int B_WIDTH = SnakeGame.B_WIDTH, B_HEIGHT = SnakeGame.B_HEIGHT;
     CardLayout cardLayout;
     JPanel mainPanel;
+    Menu menu;
     Board board;
-    JButton start_game;
+    JButton start_game, clearScore;
     JLabel pauseMSG;
-    JButton easy, medium, hard;
 
-    LoadGame(int B_WIDTH, int B_HEIGHT, CardLayout cardLayout, JPanel mainPanel, Board board) {
-        this.B_WIDTH = B_WIDTH;
-        this.B_HEIGHT = B_HEIGHT;
-
+    LoadGame(CardLayout cardLayout, JPanel mainPanel, Board board) {
         this.setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
         this.setBackground(Color.GREEN);
         this.setFocusable(true);
@@ -31,82 +28,108 @@ public class LoadGame extends JPanel implements ActionListener {
         this.board = board;
 
         start_game = new JButton("Start New Game");
-        this.add(start_game);
         start_game.setBackground(Color.WHITE);
         start_game.setForeground(Color.BLUE);
-        start_game.setFont(new Font(start_game.getFont().getFontName(), Font.BOLD, 16));
-        start_game.setBounds(B_WIDTH / 2 - 90, B_HEIGHT / 2 - 45, 180, 30);
+        start_game.setFont(new Font(start_game.getFont().getFontName(), Font.BOLD, 18));
+        start_game.setBounds(B_WIDTH / 2 - 100, B_HEIGHT / 2 - 40, 200, 36);
         start_game.addActionListener(this);
+        this.add(start_game);
+
+        clearScore = new JButton("Reset Score");
+        clearScore.setBackground(Color.BLACK);
+        clearScore.setForeground(Color.RED);
+        clearScore.setFont(new Font(clearScore.getFont().getFontName(), Font.PLAIN, 14));
+        clearScore.setBounds(B_WIDTH / 2 - 70, B_HEIGHT / 2 + 20, 140, 30);
+        clearScore.addActionListener(this);
+        this.add(clearScore);
 
         pauseMSG = new JLabel("Press SPACE BAR to Pause/Resume the Game");
         pauseMSG.setForeground(Color.BLACK);
-        pauseMSG.setFont(new Font(pauseMSG.getFont().getFontName(), Font.PLAIN, pauseMSG.getFont().getSize() + 1));
         int label_stringWidth = pauseMSG.getFontMetrics(pauseMSG.getFont()).stringWidth(pauseMSG.getText());
-        pauseMSG.setBounds((B_WIDTH - label_stringWidth) / 2, B_HEIGHT / 2 + 30, label_stringWidth, 18);
+        pauseMSG.setBounds((B_WIDTH - label_stringWidth) / 2, B_HEIGHT / 2 + 85, label_stringWidth, pauseMSG.getFont().getSize());
         this.add(pauseMSG);
-        repaint();
     }
 
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         if (actionEvent.getSource() == start_game) {
-            JButton button = (JButton) actionEvent.getSource();
-            button.setVisible(false);
-            pauseMSG.setVisible(false);
-
-            JLabel diff_label = new JLabel("Select Difficulty Level:");
-            diff_label.setForeground(Color.BLACK);
-            diff_label.setFont(new Font(diff_label.getFont().getFontName(), Font.BOLD, diff_label.getFont().getSize() + 4));
-            int label_stringWidth = diff_label.getFontMetrics(diff_label.getFont()).stringWidth(diff_label.getText());
-            diff_label.setBounds((B_WIDTH - label_stringWidth) / 2, B_HEIGHT / 2 - 70, label_stringWidth, 20);
-            this.add(diff_label);
-            repaint();
-
-            easy = new JButton("Easy");
-            this.add(easy);
-            easy.setBackground(Color.WHITE);
-            easy.setFont(new Font(easy.getFont().getFontName(), Font.PLAIN, easy.getFont().getSize() + 2));
-            easy.setBounds(B_WIDTH / 2 - 60, B_HEIGHT / 2 - 36, 110, 26);
-            easy.addActionListener(this);
-
-            medium = new JButton("Medium");
-            this.add(medium);
-            medium.setBackground(Color.WHITE);
-            medium.setFont(new Font(medium.getFont().getFontName(), Font.PLAIN, medium.getFont().getSize() + 2));
-            medium.setBounds(B_WIDTH / 2 - 60, B_HEIGHT / 2, 110, 26);
-            medium.addActionListener(this);
-
-            hard = new JButton("Hard");
-            this.add(hard);
-            hard.setBackground(Color.WHITE);
-            hard.setFont(new Font(hard.getFont().getFontName(), Font.PLAIN, hard.getFont().getSize() + 2));
-            hard.setBounds(B_WIDTH / 2 - 60, B_HEIGHT / 2 + 36, 110, 26);
-            hard.addActionListener(this);
+            menu = new Menu(cardLayout, mainPanel, board);
+            mainPanel.add(menu, "menu");
+            cardLayout.show(mainPanel, "menu");
         }
+        else if (actionEvent.getSource() == clearScore) {
+            String filePath = Objects.requireNonNull(getClass().getResource("/")).toString();
+            File file = new File(filePath.substring(6, filePath.length() - 15) + "src\\main\\resources\\HScore.txt");
 
-        if (actionEvent.getSource() == easy) {
             try {
-                board.setDELAY(300);
-            } catch (IOException e) {
+                BufferedWriter bw = new BufferedWriter(new FileWriter(file));
+                bw.write("0");
+                bw.close();
+            }
+            catch (IOException e) {
                 throw new RuntimeException(e);
             }
-            cardLayout.show(mainPanel, "board");
+
+            this.showToast();
         }
-        else if (actionEvent.getSource() == medium) {
-            try {
-                board.setDELAY(200);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
+    }
+
+    void showToast() {
+        String s = "The score is reset!";
+        Font small = new Font("Helvetica", Font.BOLD, 16);
+        FontMetrics fontMetrics = getFontMetrics(small);
+        int x = (B_WIDTH - fontMetrics.stringWidth(s)) / 2, y = B_HEIGHT - 80;
+
+        JWindow w = new JWindow();
+        w.setBackground(new Color(0, 0, 0, 0));
+
+        JPanel p = new JPanel() {
+            public void paintComponent(Graphics g) {
+                int wid = g.getFontMetrics().stringWidth(s);
+                int hei = g.getFontMetrics().getHeight();
+
+                // draw the boundary of the toast and fill it
+                 g.setColor(Color.black);
+                 g.fillRect(10, 10, wid + 30, hei + 10);
+                 g.setColor(Color.black);
+                 g.drawRect(10, 10, wid + 30, hei + 10);
+
+                 // set the color of text
+                 g.setColor(new Color(255, 255, 255, 240));
+                 g.drawString(s, 25, 27);
+                 int t = 250;
+
+                 // draw the shadow of the toast
+                 for (int i = 0; i < 4; i++) {
+                     t -= 60;
+                     g.setColor(new Color(0, 0, 0, t));
+                     g.drawRect(10 - i, 10 - i, wid + 30 + i * 2, hei + 10 + i * 2);
+                 }
             }
-            cardLayout.show(mainPanel, "board");
+        };
+
+        w.add(p);
+        w.setLocation(x, y);
+        w.setSize(300, 100);
+
+        try {
+            w.setOpacity(1);
+            w.setVisible(true);
+
+//            wait for some time
+            Thread.sleep(800);
+
+//            make the message disappear slowly
+            for (float i = 1.0f; i > 0.2; i -= 0.1) {
+                Thread.sleep(100);
+                w.setOpacity(i);
+            }
+
+            // set the visibility to false
+            w.setVisible(false);
         }
-        else if (actionEvent.getSource() == hard) {
-            try {
-                board.setDELAY(150);
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-            cardLayout.show(mainPanel, "board");
+        catch (Exception e) {
+            e.printStackTrace();
         }
     }
 }

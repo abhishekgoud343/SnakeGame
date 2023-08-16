@@ -5,12 +5,12 @@ import java.awt.*;
 
 
 public class SnakeGame extends JFrame {
-    int B_WIDTH = 480;
-    int B_HEIGHT = 480;
+    static final int B_WIDTH = 480, B_HEIGHT = 480;
     CardLayout cardLayout;
     JPanel mainPanel;
-    LoadGame menu;
+    LoadGame load;
     Board board;
+    GameOver gameOver;
 
     SnakeGame() {
         this.setTitle("Snake Game 2D");
@@ -18,11 +18,13 @@ public class SnakeGame extends JFrame {
 
         cardLayout = new CardLayout();
         mainPanel = new JPanel(cardLayout);
-        
-        board = new Board(B_WIDTH, B_HEIGHT);
-        menu = new LoadGame(B_WIDTH, B_HEIGHT, cardLayout, mainPanel, board);
-        mainPanel.add(menu, "menu");
+
+        gameOver = new GameOver(cardLayout, mainPanel);
+        board = new Board(cardLayout, mainPanel, gameOver);
+        load = new LoadGame(cardLayout, mainPanel, board);
+        mainPanel.add(load, "load");
         mainPanel.add(board, "board");
+        mainPanel.add(gameOver, "gameOver");
 
         this.add(mainPanel);
         this.pack();
