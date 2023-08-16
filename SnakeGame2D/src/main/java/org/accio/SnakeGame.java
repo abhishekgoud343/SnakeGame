@@ -22,11 +22,13 @@ public class SnakeGame extends JFrame {
         gameOver = new GameOver(cardLayout, mainPanel);
         board = new Board(cardLayout, mainPanel, gameOver);
         load = new LoadGame(cardLayout, mainPanel, board);
+
         mainPanel.add(load, "load");
         mainPanel.add(board, "board");
         mainPanel.add(gameOver, "gameOver");
 
         this.add(mainPanel);
+
         this.pack();
         this.setResizable(false);
         this.setVisible(true);

@@ -1,17 +1,20 @@
 package org.accio;
 
-import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.*;
+import javax.swing.*;
+import java.util.Objects;
+
 
 public class GameOver extends JPanel implements ActionListener {
     CardLayout cardLayout;
     JPanel mainPanel;
     Board board;
     int B_WIDTH = SnakeGame.B_WIDTH, B_HEIGHT = SnakeGame.B_HEIGHT;
-    int HIGHEST_SCORE, DOTS;
+    int DOTS;
+    int HIGHEST_SCORE;
     JLabel gameOverLabel, scoreLabel, hScoreLabel;
     JButton restartButton;
     File file;
@@ -21,12 +24,23 @@ public class GameOver extends JPanel implements ActionListener {
         this.mainPanel = mainPanel;
     }
 
-    void setValues(int HIGHEST_SCORE, int DOTS, File file, Board board) {
-        this.HIGHEST_SCORE = HIGHEST_SCORE;
+    void init(int DOTS, Board board) {
         this.DOTS = DOTS;
-        this.file = file;
         this.board = board;
+
+        String filePath = Objects.requireNonNull(getClass().getResource("/")).toString();
+        file = new File(filePath.substring(6, filePath.length() - 15) + "src\\main\\resources\\HScore.txt");
+
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(file));
+            String line = br.readLine();
+            HIGHEST_SCORE = Integer.parseInt(line);
+            br.close();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
+
     void screen() {
         this.setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
         this.setBackground(Color.BLACK);
@@ -68,6 +82,7 @@ public class GameOver extends JPanel implements ActionListener {
                 throw new RuntimeException(e);
             }
         }
+
         String scoreMSG = "Score: " + score;
         String hScoreMSG = "Highest Score : " + HIGHEST_SCORE;
 

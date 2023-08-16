@@ -4,7 +4,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.URL;
-import java.util.Objects;
 import javax.swing.*;
 
 
@@ -17,8 +16,7 @@ public class Board extends JPanel implements ActionListener {
     int MAX_DOTS;
     static final int INIT_DOTS = 4;
     int DOTS;
-    int[] x;
-    int[] y;
+    int[] x, y;
     int apple_x, apple_y;
     Image body, head, apple;
     Timer timer;
@@ -26,8 +24,6 @@ public class Board extends JPanel implements ActionListener {
     boolean leftDirection = true, rightDirection = false, upDirection = false, downDirection = false;
     boolean inGame = true;
     boolean isPaused = false;
-    int HIGHEST_SCORE;
-    File file;
 
     Board(CardLayout cardLayout, JPanel mainPanel, GameOver gameOver) {
         TAdapter tAdapter = new TAdapter();
@@ -36,18 +32,6 @@ public class Board extends JPanel implements ActionListener {
         this.setFocusable(true);
         this.requestFocusInWindow();
         this.setLayout(null);
-
-        String filePath = Objects.requireNonNull(getClass().getResource("/")).toString();
-        file = new File(filePath.substring(6, filePath.length() - 15) + "src\\main\\resources\\HScore.txt");
-
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(file));
-            String line = br.readLine();
-            HIGHEST_SCORE = Integer.parseInt(line);
-            br.close();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
 
         this.cardLayout = cardLayout;
         this.mainPanel = mainPanel;
@@ -125,7 +109,9 @@ public class Board extends JPanel implements ActionListener {
             }
         }
         else {
-            this.gameOver();
+            gameOver.init(DOTS, this);
+            cardLayout.show(mainPanel, "gameOver");
+            gameOver.screen();
             timer.stop();
         }
     }
@@ -181,12 +167,6 @@ public class Board extends JPanel implements ActionListener {
         //collision with border
         if (x[0] <= 0 || x[0] >= B_WIDTH - 10 || y[0] <= 0 || y[0] >= B_HEIGHT - 10)
             inGame = false;
-    }
-
-    public void gameOver() {
-        gameOver.setValues(HIGHEST_SCORE, DOTS, file, this);
-        cardLayout.show(mainPanel, "gameOver");
-        gameOver.screen();
     }
 
     //implements Controls
