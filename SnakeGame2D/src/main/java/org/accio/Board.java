@@ -165,7 +165,7 @@ public class Board extends JPanel implements ActionListener {
                 }
 
         //collision with border
-        if (x[0] <= 0 || x[0] >= B_WIDTH - 10 || y[0] <= 0 || y[0] >= B_HEIGHT - 10)
+        if (x[0] < 0 || x[0] > B_WIDTH - 10 || y[0] < 0 || y[0] > B_HEIGHT - 10)
             inGame = false;
     }
 
