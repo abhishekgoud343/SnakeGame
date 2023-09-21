@@ -5,7 +5,7 @@ import java.awt.*;
 
 
 public class SnakeGame extends JFrame {
-    static final int B_WIDTH = 480, B_HEIGHT = 480;
+    static final int B_WIDTH = 480, B_HEIGHT = 480; //Board width and board height
     CardLayout cardLayout;
     JPanel mainPanel;
     LoadGame load;

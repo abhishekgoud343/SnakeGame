@@ -117,8 +117,11 @@ public class Board extends JPanel implements ActionListener {
     }
 
     public void locateApple() {
-        apple_x = (int) (Math.random() * 39) * DOT_SIZE;
-        apple_y = (int) (Math.random() * 39) * DOT_SIZE;
+        int range_x = B_WIDTH / 10 - 1;
+        int range_y = B_HEIGHT / 10 - 1;
+
+        apple_x = (int) (Math.random() * range_x) * DOT_SIZE;
+        apple_y = (int) (Math.random() * range_y) * DOT_SIZE;
     }
 
     @Override
@@ -151,6 +154,7 @@ public class Board extends JPanel implements ActionListener {
     public void checkApple() {
         if (apple_x == x[0] && apple_y == y[0]) {
             ++DOTS;
+
             this.locateApple();
         }
     }

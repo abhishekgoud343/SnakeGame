@@ -58,11 +58,11 @@ public class Menu extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent actionEvent) {
         if (actionEvent.getSource() == easy)
-            board.setDELAY(240);
+            board.setDELAY(200);
         else if (actionEvent.getSource() == medium)
-            board.setDELAY(180);
+            board.setDELAY(150);
         else if (actionEvent.getSource() == hard)
-            board.setDELAY(120);
+            board.setDELAY(100);
 
         cardLayout.show(mainPanel, "board");
         board.requestFocusInWindow();
